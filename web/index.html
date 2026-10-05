@@ -220,7 +220,8 @@ async function onchain(a) {
 }
 
 function cloud(d) {
-  const W = 600, H = 300, P = 34, all = [d.real_curve, ...d.clone_curves].flat();
+  const all = [d.real_curve, ...d.clone_curves].flat(), W = 600, H = 300,
+    P = 10 + 6.6 * Math.max(...[Math.min(0, ...all), Math.max(0, ...all)].map(v => String(Math.round(v)).length));
   const lo = Math.min(0, ...all), hi = Math.max(0, ...all), n = d.real_curve.length - 1 || 1;
   const x = i => P + (W - P - 8) * i / n, y = v => 8 + (H - 30) * (hi - v) / (hi - lo || 1);
   const path = c => c.map((v, i) => (i ? "L" : "M") + x(i * n / (c.length - 1 || 1)).toFixed(1) + " " + y(v).toFixed(1)).join("");
