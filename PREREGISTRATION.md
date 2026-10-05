@@ -44,7 +44,7 @@ For each Hyperliquid account or vault: does its entry **timing** make money, or 
 
 ---
 
-## Amendment 1: Mon 5 Oct 2026, ~20:05 WIB, after the first fresh run and before any of the analyses below
+## Amendment 1: Mon 5 Oct 2026, 19:54 WIB, after the first fresh run and before any of the analyses below
 
 **What the first run showed (reported in full, not hidden):**
 - **Accounts:** 216 of the top 500 are eligible. 0 pass Benjamini-Hochberg. 26 (12.0%) have raw p < 0.05. Calibration: 0% pass, KS p = 0.35.

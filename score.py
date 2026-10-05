@@ -8,7 +8,7 @@ score >= the real timeline. Benjamini-Hochberg at q=0.10 across addresses.
 """
 import json, io, os, sys, glob, hashlib, time
 import numpy as np, pandas as pd
-from scipy.stats import kstest, spearmanr
+from scipy.stats import kstest, spearmanr, norm
 
 H = 3_600_000
 OPEN = {"Open Long", "Open Short", "Long > Short", "Short > Long"}
@@ -49,8 +49,10 @@ class Grid:
         return c[ok], t[ok], s[ok]
 
 
-def test(grid, dec, seed, shift_real=False):
-    """Returns dict with real/direction/timing (bp per decision), p, n, span; None if ineligible."""
+def test(grid, dec, seed, shift_real=False, min_dec=MIN_DEC, min_span=MIN_SPAN):
+    """Returns dict with real/direction/timing (bp per decision), p, n, span; None if ineligible.
+    p = 1 - Phi(z) against the clones (amendment 1: the permutation floor 1/(K+1) sits above
+    the BH threshold q/m, so a permutation p can never pass); p_perm kept for reference."""
     v = grid.idx(dec)
     if v is None:
         return None
@@ -60,7 +62,7 @@ def test(grid, dec, seed, shift_real=False):
     real_r = grid.R[t, c]
     n = int(np.isfinite(real_r).sum())
     lo, L = int(t.min()), int(t.max() - t.min() + 1)
-    if n < MIN_DEC or L < MIN_SPAN:
+    if n < min_dec or L < min_span:
         return None
     rng = np.random.default_rng(seed)
     if shift_real:   # calibration: a synthetic trader with no timing skill by construction
@@ -70,9 +72,11 @@ def test(grid, dec, seed, shift_real=False):
     tt = lo + ((t - lo)[None, :] + ks[:, None]) % L
     clones = np.nanmean(s[None, :] * grid.R[tt, c[None, :]], axis=1)
     clones = clones[np.isfinite(clones)]
-    p = (1 + (clones >= real).sum()) / (1 + len(clones))
+    p_perm = (1 + (clones >= real).sum()) / (1 + len(clones))
+    p = norm.sf((real - clones.mean()) / clones.std(ddof=1))
     return dict(n=n, span_days=round(L / 24, 1), real=1e4 * real, direction=1e4 * clones.mean(),
-                timing=1e4 * (real - clones.mean()), p=float(p), clones=clones, ks=ks, t=t, c=c, s=s)
+                timing=1e4 * (real - clones.mean()), p=float(p), p_perm=float(p_perm),
+                clones=clones, ks=ks, t=t, c=c, s=s)
 
 
 def bh(p, q=Q):
@@ -88,15 +92,15 @@ def seed_of(a, salt=""):
     return int(hashlib.sha256((a + salt).encode()).hexdigest()[:8], 16)
 
 
-def run(grid, books, label=""):
+def run(grid, books, label="", **kw):
     """books: {addr: decisions}. Returns DataFrame of eligible addresses (+ calibration)."""
     rows, cal = [], []
     for a, dec in books.items():
-        r = test(grid, dec, seed_of(a))
+        r = test(grid, dec, seed_of(a), **kw)
         if r is None:
             continue
-        z = test(grid, dec, seed_of(a, "cal"), shift_real=True)
-        rows.append(dict(addr=a, **{k: r[k] for k in ("n", "span_days", "real", "direction", "timing", "p")}))
+        z = test(grid, dec, seed_of(a, "cal"), shift_real=True, **kw)
+        rows.append(dict(addr=a, **{k: r[k] for k in ("n", "span_days", "real", "direction", "timing", "p", "p_perm")}))
         cal.append(z["p"])
     d = pd.DataFrame(rows)
     if not len(d):
@@ -110,7 +114,7 @@ def run(grid, books, label=""):
 
 def summary(d, calib, label):
     print(f"\n== {label}: eligible {len(d)} ==")
-    print(f"pass after BH q={Q}: {int(d.passes.sum())}   raw p<0.05: {int((d.p < .05).sum())} "
+    print(f"pass after BH q={Q}: {int(d.passes.sum())}   permutation p<0.05: {int((d.p_perm < .05).sum())}   z p<0.05: {int((d.p < .05).sum())} "
           f"({(d.p < .05).mean():.1%}, chance 5%)   raw p<0.01: {int((d.p < .01).sum())}")
     print(f"median bp/decision  real {d.real.median():.1f}  direction {d.direction.median():.1f}  "
           f"timing {d.timing.median():.1f}   timing<0: {(d.timing < 0).mean():.1%}")
@@ -148,7 +152,7 @@ def _demo():
     skilled = [("X", int(k - 1) * H, 1) for k in jumps]      # buys the hour before each jump
     lucky = [("X", h * H, 1) for h in rng.integers(0, T - 100, 60)]
     a, b = test(g, skilled, 7), test(g, lucky, 7)
-    assert a["p"] < 0.01 and a["timing"] > 100, a["p"]
+    assert a["p"] < 1e-4 and a["p_perm"] < 0.01 and a["timing"] > 100, a["p"]
     assert b["p"] > 0.01, b["p"]
     assert bh([0.001, 0.2, 0.5]).tolist() == [True, False, False]
     print("demo ok", round(a["p"], 4), round(b["p"], 3))

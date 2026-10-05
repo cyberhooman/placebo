@@ -1,0 +1,13 @@
+
+== top-500 accounts, pre-window decisions: eligible 178 ==
+pass after BH q=0.1: 6   permutation p<0.05: 22   z p<0.05: 22 (12.4%, chance 5%)   raw p<0.01: 9
+median bp/decision  real 48.2  direction 26.0  timing 9.5   timing<0: 46.1%
+calibration (synthetic no-skill traders): pass 2.2%  raw p<.05 6.7%  KS p=0.764
+
+== top-500 accounts, in-window decisions: eligible 185 ==
+pass after BH q=0.1: 1   permutation p<0.05: 20   z p<0.05: 20 (10.8%, chance 5%)   raw p<0.01: 3
+median bp/decision  real 54.7  direction 27.0  timing 31.6   timing<0: 36.8%
+calibration (synthetic no-skill traders): pass 1.1%  raw p<.05 5.9%  KS p=0.687
+
+eligible in both: 125   Spearman timing pre vs in: rho=-0.091 p=0.31
+of those: pre timing>0 58.4%, in timing>0 64.0%

@@ -1,0 +1,15 @@
+demo ok 0.001 0.427
+595 addresses with fills, 333 coins
+
+== fresh accounts (top 500 by 30d PnL): eligible 216 ==
+pass after BH q=0.1: 0   raw p<0.05: 26 (12.0%, chance 5%)   raw p<0.01: 8
+median bp/decision  real 53.6  direction 28.6  timing 28.4   timing<0: 38.0%
+calibration (synthetic no-skill traders): pass 0.0%  raw p<.05 4.6%  KS p=0.353
+
+== fresh vaults (top 100 by TVL): eligible 52 ==
+pass after BH q=0.1: 0   raw p<0.05: 4 (7.7%, chance 5%)   raw p<0.01: 2
+median bp/decision  real 37.4  direction 29.7  timing 11.8   timing<0: 36.5%
+calibration (synthetic no-skill traders): pass 0.0%  raw p<.05 5.8%  KS p=0.798
+
+H-C: 30d ROI rank vs current net exposure (eligible accounts) rho=0.374 p=2.2e-07 n=181
+wrote web/data (268 addresses)
