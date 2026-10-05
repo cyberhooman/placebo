@@ -12,14 +12,13 @@ Every account and vault on Hyperliquid is public, down to each fill, so the test
 
 Data: the top 500 Hyperliquid leaderboard accounts by 30-day PnL and the top 100 vaults by TVL, with the last 90 days of fills, pulled on 5 Oct 2026.
 
-1. **Most of the leaderboard can't be judged.** 202 of the top 500 made fewer than 50 opening decisions in 90 days (median 57). That is too few to tell skill from luck.
-2. **The month that ranked them was their luckiest.** For accounts testable in both periods, the median timing edge was **+31.6 bp per decision** in the 30-day window that put them on the leaderboard, against **+9.5 bp** in the two months before.
-3. **Timing doesn't carry over.** Timing before and during that window is uncorrelated: Spearman rho = −0.09 (p = 0.31, n = 125).
+1. **Much of the leaderboard can't be judged.** 194 of the top 500 made fewer than 50 opening decisions in 90 days, which is too few to tell skill from luck. 8 more had their history cut short by Hyperliquid's 10,000-fill limit, and 62 had no opening trades in the window.
+2. **Timing doesn't carry over.** For the 125 accounts testable both before and during the 30-day window that put them on the leaderboard, timing in one window says nothing about the other: Spearman rho = −0.09 (p = 0.31). Their median timing edge was +27.9 bp per decision during the window and +18.7 bp before it. Only 54% timed better during it.
 4. **The biggest vaults look like chance.** None of the 52 testable top-100 vaults beats its placebo. 3.8% have p < 0.05, against the 5% chance alone gives. In median bp per decision, direction is +29.7 and timing is +11.8.
 
 | Group | Tested | Beat their placebo (BH, q = 0.10) | p < 0.05 (chance: 5%) | Calibration: synthetic no-skill traders |
 |---|---|---|---|---|
-| Top-500 accounts, full 90 days | 216 | 4 (selection-biased window, see 2) | 10.6% | 0.5% pass, KS p = 0.48 |
+| Top-500 accounts, full 90 days | 216 | 4 (includes the window that selected them) | 10.6% | 0.5% pass, KS p = 0.48 |
 | Top-500 accounts, before their leaderboard month | 178 | 6 (but calibration false-passes ≈ 4) | 12.4% | 2.2% pass, KS p = 0.76 |
 | Top-100 vaults, full 90 days | 52 | **0** | 3.8% | 0.0% pass, KS p = 0.52 |
 
@@ -28,6 +27,10 @@ Data: the top 500 Hyperliquid leaderboard accounts by 30-day PnL and the top 100
 - That run's "0 pass" therefore carried no information and is withdrawn, along with an earlier "0 of 377" on 8 Sep data.
 - Amendment 1 (z-based p-values, and a split at the leaderboard window) was committed before the runs above.
 - The raw output of all three runs is in [results/](results/).
+- **Erratum, 5 Oct, 23:00 WIB.** Earlier versions of this README, the Arena page and the first X thread said "202 of the top 500" made fewer than 50 decisions, and that the leaderboard month was "~3× better timed" (+31.6 vs +9.5 bp).
+  - The 202 included 8 accounts whose history is cut by the 10,000-fill limit; the correct count is 194.
+  - +31.6 and +9.5 are medians over *different* sets of accounts (185 and 178). On the same 125 accounts the medians are +27.9 and +18.7 bp, about 1.5×.
+  - The non-persistence result (rho −0.09) is unchanged.
 - The pre-registered data gate (at least 300 testable addresses) failed: 268 were testable. That failure is reported, not hidden.
 
 ## How it works

@@ -74,3 +74,12 @@ For each Hyperliquid account or vault: does its entry **timing** make money, or 
   - If it reflects luck plus direction, *pre* p-values look uniform (about 5% below 0.05), median *pre* timing is about 0, and the pre/in correlation is about 0.
 
 **K1.** It fails by the letter. Whether the project continues is the user's decision; this amendment does not change the gate.
+
+---
+
+## Erratum to the reported numbers: 5 Oct 2026, 23:00 WIB
+
+Two numbers in the write-ups (README, Arena page, X thread, videos) were wrong. The method, the runs and the files in `results/` are unchanged.
+
+1. "202 of the top 500 made fewer than 50 opening decisions" included 8 accounts whose fill history is cut by the 10,000-fill limit. The correct count is **194**.
+2. The "+31.6 vs +9.5 bp" timing comparison (in the leaderboard window vs before it) compared medians over different sets of accounts: 185 in-window, 178 pre-window. On the **same 125 accounts** the medians are **+27.9 vs +18.7 bp**, and 53.6% of them timed better in-window. The pre-registered A2 statistic, the pre/in Spearman correlation, is −0.09 (p = 0.31), as reported.
