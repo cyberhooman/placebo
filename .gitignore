@@ -1,4 +1,4 @@
-data/
+/data/
 __pycache__/
 *.tmp
 contracts/out/
@@ -7,3 +7,4 @@ contracts/lib/
 .env
 
 contracts/broadcast/*/31337/
+PITCH.md
