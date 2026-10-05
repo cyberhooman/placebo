@@ -65,6 +65,11 @@ svg{width:100%;height:auto;display:block}
 .split i{display:block;height:100%}
 .legend{font-size:12px;color:var(--mute);display:flex;gap:16px;flex-wrap:wrap}
 .legend i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:6px}
+.chain-live{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding:12px 20px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--ink);background:#f7f4ec}
+.chain-live a{color:var(--ink);margin-left:auto}.chain-live code{font-family:var(--mono);color:var(--pass)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--placebo);display:inline-block}
+.dot.on{background:#1f9d55;box-shadow:0 0 0 0 rgba(31,157,85,.5);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(31,157,85,0)}100%{box-shadow:0 0 0 0 rgba(31,157,85,0)}}
 .note{font-size:13px;color:var(--mute);padding:14px 20px;border-top:1px solid var(--rule)}
 .method{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:70px;border-top:1.5px solid var(--ink)}
 .method div{padding:22px 20px 0 0}
@@ -184,12 +189,34 @@ function draw(d) {
       <div><b>${fmt(d.timing)}</b><span>timing edge, bp</span></div>
       <div><b>${d.p.toFixed(3)}</b><span>placebo p-value</span></div>
     </div>
+    <div class="chain-live" id="chain"><span class="dot"></span>Reading this address from HyperEVM mainnet…</div>
     <div class="note">${d.passes
       ? "This address's entry timing beats its own placebo after correcting for every address tested."
-      : `${Math.round(d.p * 1000)} in 1,000 clones did at least as well with the same coins and direction at random times. The test says nothing about exits or edge inside the hour.`}</div>
+      : `With the same coins and direction at random times, a record this good comes up about ${Math.max(1, Math.round(d.p * 100))}% of the time (p = ${d.p.toFixed(3)}, corrected across every address tested). The test says nothing about exits or edge inside the hour.`}</div>
   </div>`;
   $("#result").style.display = "block";
   $("#result").scrollIntoView({ behavior: "smooth", block: "start" });
+  onchain(d.addr);
+}
+
+// Live read: PlaceboLens.check(addr, 0) joins the stored score with HyperCore state (read precompiles).
+const RPC = "https://rpc.hyperliquid.xyz/evm", LENS = "0xe1d70b4723aeedd94ad21f5034a783b4edf67607";
+async function onchain(a) {
+  const el = $("#chain");
+  try {
+    const data = "0x9d0b3fcd" + a.slice(2).padStart(64, "0") + "0".repeat(64);
+    const r = await fetch(RPC, { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: LENS, data }, "latest"] }) }).then(r => r.json());
+    const w = r.result.slice(2).match(/.{64}/g).map(x => BigInt("0x" + x));
+    const sg = v => Number(v >= 2n ** 255n ? v - 2n ** 256n : v);
+    const [n, , , tim, pb, , asof, skilled, live, av] = w;
+    if (!Number(asof)) { el.innerHTML = `<span class="dot"></span>Not in the on-chain registry yet.`; return; }
+    const usd = Number(sg(av)) / 1e6;
+    el.innerHTML = `<span class="dot on"></span><b>Live on HyperEVM</b>
+      <span>registry: ${Number(n)} decisions · timing ${fmt(sg(tim), 0)} bp · p ${(Number(pb) / 1e4).toFixed(3)} · <code>isSkilled</code> = ${skilled ? "true" : "false"}</span>
+      ${Number(live) ? `<span>HyperCore account value now: <b>$${usd >= 1e6 ? (usd / 1e6).toFixed(2) + "M" : usd >= 1e3 ? (usd / 1e3).toFixed(1) + "k" : usd.toFixed(0)}</b></span>` : ""}
+      <a href="https://repo.sourcify.dev/999/${LENS}">PlaceboLens ↗</a>`;
+  } catch (e) { el.innerHTML = `<span class="dot"></span>On-chain read unavailable right now.`; }
 }
 
 function cloud(d) {
