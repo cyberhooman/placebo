@@ -5,5 +5,5 @@ contracts/out/
 contracts/cache/
 contracts/lib/
 .env
-web/data/
+
 contracts/broadcast/*/31337/

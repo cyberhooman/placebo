@@ -44,15 +44,15 @@ Never: "imagine a world", "revolutionize", a TAM slide, a roadmap grid, a music 
 1. I replayed the trades of Hyperliquid's top {N_ACC} traders at random times. Same coins, same direction, only the timing changed. {N_PASS_ACC} beat their own placebo. 🧵
 2. Why: the leaderboard ranks PnL, and PnL is mostly which way the market went. On 8 Sep, with the market up 21%, the top fifth by profit was 93% long. The bottom fifth was net short.
 3. The test: shift a trader's whole timeline to 1,000 random offsets. Coins, direction and rhythm are kept; only *when* moves. If the real record can't beat the clones, timing added nothing.
-4. Calibrated: synthetic traders with no skill by construction pass at 0%. Method pre-registered before I looked at the data: {REPO}/PREREGISTRATION.md
-5. Paste any address: {PAGE}. Scores are on HyperEVM, so a contract can check `isSkilled()` before it allocates.
+4. Calibrated: synthetic traders with no skill by construction pass at 0%. Method pre-registered before I looked at the data: https://github.com/cyberhooman/placebo/PREREGISTRATION.md
+5. Paste any address: https://cyberhooman.github.io/placebo/. Scores are on HyperEVM, so a contract can check `isSkilled()` before it allocates.
 6. Limits: hourly resolution, 24h horizon, exits not scored. Built solo for @colosseum's World's Fair, Hyperliquid track.
 
 ## Arena forum post (Tue 6 Oct, after the gate)
 
 > **Placebo: does a Hyperliquid trader's timing beat a placebo of their own trades?**
-> I replay each trader's own trades at 1,000 random offsets (same coins, direction and rhythm) and test whether the real record beats its clones. On the top {N_ACC} accounts by 30-day PnL: {N_PASS_ACC} pass after correction. The method was pre-registered first, scores are on HyperEVM testnet, and the code is open. I'd love one thing from anyone who runs a vault or a copy-trading product: does this match how you'd want traders judged? {PAGE}
+> I replay each trader's own trades at 1,000 random offsets (same coins, direction and rhythm) and test whether the real record beats its clones. On the top {N_ACC} accounts by 30-day PnL: {N_PASS_ACC} pass after correction. The method was pre-registered first, scores are on HyperEVM testnet, and the code is open. I'd love one thing from anyone who runs a vault or a copy-trading product: does this match how you'd want traders judged? https://cyberhooman.github.io/placebo/
 
 ## DM to a vault leader whose vault passes (send only to passes)
 
-> Hi, solo builder in Colosseum's Hyperliquid track. I built Placebo, an open test that replays a vault's own trades at random times to separate timing from market direction. {VAULT} is one of {N_PASS} addresses out of {N_TESTED} that beat their placebo after correction: {PAGE}#{ADDR}. Does the method match how you'd want depositors to judge you? A one-line reply I could quote (with your OK) would mean a lot.
+> Hi, solo builder in Colosseum's Hyperliquid track. I built Placebo, an open test that replays a vault's own trades at random times to separate timing from market direction. {VAULT} is one of {N_PASS} addresses out of {N_TESTED} that beat their placebo after correction: https://cyberhooman.github.io/placebo/#{ADDR}. Does the method match how you'd want depositors to judge you? A one-line reply I could quote (with your OK) would mean a lot.
