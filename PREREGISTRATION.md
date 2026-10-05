@@ -1,6 +1,6 @@
 # Placebo: pre-registration
 
-Written Mon 5 Oct 2026, about 16:30 WIB (09:30 UTC). The fresh fills download was running, and no fresh result had been computed or seen. This file is committed before the results are, so the git history shows the order.
+Written Mon 5 Oct 2026 at 15:53 WIB (08:53 UTC). The fresh fills download was running, and no fresh result had been computed or seen. This file is committed before the results are, so the git history shows the order.
 
 ## Question
 
