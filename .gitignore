@@ -1,0 +1,7 @@
+data/
+__pycache__/
+*.tmp
+contracts/out/
+contracts/cache/
+contracts/lib/
+.env
