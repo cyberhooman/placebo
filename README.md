@@ -2,6 +2,8 @@
 
 **Did they trade well, or did the market move?**
 
+**Try it:** https://cyberhooman.github.io/placebo/ · **On-chain:** [`PlaceboRegistry`](https://repo.sourcify.dev/999/0xd540b8180b8d77c5b61ba73cded772e0cb8ea14a) on HyperEVM mainnet
+
 Placebo replays a trader's own trades at random times: same coins, same direction, same number of decisions, same spacing between them. Only *when* changes. If the real record can't beat 1,000 of these clones, its profit came from the market's direction, not from timing.
 
 Every account and vault on Hyperliquid is public, down to each fill, so the test can run on anyone. The scores are written to a registry on HyperEVM, where any contract can read `isSkilled(address)`.
